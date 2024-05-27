@@ -1,7 +1,7 @@
 body{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(-40deg, #771bf0, #bdeca2);
-    height: 100vh;
+    height: 100%;
     margin: 0%;
 }
 .titre h1{
