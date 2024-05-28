@@ -1,8 +1,10 @@
 body{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(-40deg, #771bf0, #bdeca2);
-    height: 100vh;
+    /* height: 100vh; */
     margin: 0%;
+    min-height: 100vh;
+    height: 100%;
 }
 .titre h1{
     display: inline;
@@ -27,6 +29,7 @@ h3{
     color: white;
     text-align:center;
     text-shadow: 1px 1px 2px #242424;
+    margin: 20px;
 }
 
 .lien{
@@ -43,6 +46,7 @@ nav{
     display: flex;
     border: white 2px solid;
     width: 30vw;
+
     margin: 50px;
 }
 
@@ -112,4 +116,35 @@ form input{
     margin:auto;
     margin-top: 0;
     margin-bottom: 5%;
+}
+
+table{
+    table-layout: fixed;
+    margin: auto;
+    margin-top: 2%;
+
+}
+
+td{
+    border: lightgrey 1px solid;
+    text-align: center;
+}
+
+th{
+    border: lightgray 1px solid;
+    text-align: center;
+    padding: 5px;
+}
+
+#sectionJeu p{
+    text-align: center;
+    margin-top: 0;
+}
+
+tr img{
+    width: 100px;
+}
+
+#jeu img:last-child{
+    display:none;
 }
