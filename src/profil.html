@@ -23,9 +23,47 @@
 
     <section id="Profil" class="principale">
         <h3>Profil</h3>
-        <img src="">
-        
+        <img id="imgProfil" src="/ressources/picture-profile-blank.webp">
+        <form action="">
+        <label for="nom">Nom d'utilisateur</label>
+            <input type="text"
+            id="nom"
+            name="nom"
+            autofocus
+            required
+            placeholder="3 caractères minimum"
+            pattern="[A-Za-z0-9]{3,}"
+            
+            >
 
+            <label for="email">Entrez votre email</label>
+            <input type="email"
+            id="email"
+            name="email"
+            required
+            placeholder="Votre email"
+            >
+            <label for="themeJeu">Choix du Memory</label>
+            <select name="themeJeu" id="listeThemeJeu">
+                <option value="theme1">theme 1</option>
+                <option value="theme2">theme 2</option>
+                <option value="theme3">theme 3</option>
+                <option value="theme4">theme 4</option>
+            </select>
+
+            <img id="themeChoisi" src="/ressources/couleurs.jpg" alt="">
+
+            <label for="tailleJeu">Taille du Memory</label>
+            <select name="tailleJeu" id="listeTailleJeu">
+                <option value="taille1">taille 1</option>
+                <option value="taille2">taille 2</option>
+                <option value="taille3">taille 3</option>
+                <option value="tialle4">taille 4</option>
+            </select>
+
+            <button class="button" type="submit" id="enregistrerOptions">Enregistrer options</button>
+
+        </form>
 
 
 
