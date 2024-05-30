@@ -271,8 +271,8 @@ function reinitialiserJeu() {
     // Mettre à jour l'affichage du nombre de coups
     document.getElementById('affichageNbCoups').textContent = "Nombre de coups : " + nombreDeCoups;
 
-// Mettre à jour l'affichage du compteur de paires
-document.getElementById('compteurPaires').textContent = "Paires découvertes : " + pairesTrouvees;
+    // Mettre à jour l'affichage du compteur de paires
+    document.getElementById('compteurPaires').textContent = "Paires découvertes : " + pairesTrouvees;
 }
 
 

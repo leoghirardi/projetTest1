@@ -79,7 +79,7 @@ label{
 }
 
 form input{
-    margin-bottom: 10%;
+    margin-bottom: 10px;
     background-color:#242424;
     border-top: none;
     border-left: none;
@@ -88,7 +88,7 @@ form input{
     color:azure;
 }
 
-#mdp{
+#mdp, #nom{
     margin-bottom: 0%;
 }
 
