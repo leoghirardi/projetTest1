@@ -100,6 +100,12 @@ cartes.forEach(carte => {
     });
 });
 
+document.addEventListener('keydown', function(event) {
+    if (event.code === 'Space') {
+        reinitialiserJeu();
+    }
+});
+
 
 
 function melangerTableau(tab) {
@@ -230,15 +236,44 @@ function verifierCorrespondance() {
     }
 
     nombreDeCoups++;
-    document.getElementById('affichageNbCoups').textContent = `Nombre de coups : ${nombreDeCoups}`;
+    document.getElementById('affichageNbCoups').textContent = "Nombre de coups : " + nombreDeCoups;
 }
 
 
-    function reinitialiserVerification() {
-        premiereCarteRetournee = null;
-        secondeCarteRetournee = null;
-        estEnCoursDeVerification = false;
-    }
+function reinitialiserVerification() {
+    premiereCarteRetournee = null;
+    secondeCarteRetournee = null;
+    estEnCoursDeVerification = false;
+}
+
+
+function reinitialiserJeu() {
+    // Remettre toutes les cartes face verso
+    cartes.forEach(carte => {
+        const imgVerso = carte.querySelector('img:first-child');
+        const imgADeviner = carte.querySelector('img:last-child');
+
+        imgVerso.style.display = 'block';
+        imgADeviner.style.display = 'none';
+
+       // Supprimer la classe de rotation 3D si elle est présente
+        carte.classList.remove('carte-retournee');
+    });
+    
+    // Mélanger les images pour une nouvelle partie
+    melangerTableau(imagesPourLeJeu);
+    
+    // Réinitialiser les variables de jeu
+    reinitialiserVerification();
+    nombreDeCoups = 0;
+    pairesTrouvees = 0;
+
+    // Mettre à jour l'affichage du nombre de coups
+    document.getElementById('affichageNbCoups').textContent = "Nombre de coups : " + nombreDeCoups;
+
+// Mettre à jour l'affichage du compteur de paires
+document.getElementById('compteurPaires').textContent = "Paires découvertes : " + pairesTrouvees;
+}
 
 
 
