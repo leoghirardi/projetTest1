@@ -146,5 +146,18 @@ tr img{
 }
 
 #jeu img:last-child{
-    display:none;
+    display:none; 
+}    
+
+
+
+#jeu {
+    perspective: 1000px; /* Valeur de perspective pour l'effet 3D */
 }
+
+.carte-retournee {
+    transform: rotateY(180deg); /* Rotation de 180 degrés autour de l'axe Y */
+    transition: transform 0.5s ease; /* Animation fluide de la transformation */
+}
+
+

@@ -1,3 +1,16 @@
+
+//declaration variables
+let premiereCarteRetournee = null;
+
+let secondeCarteRetournee = null;
+
+let estEnCoursDeVerification = false;
+
+let nombreDeCoups = 0;
+
+let pairesTrouvees = 0;
+
+
 //creation du tableau contenant les images
 const imagesTab = [
     "/ressources/animaux/1.webp",
@@ -28,30 +41,65 @@ const imagesTab = [
     "/ressources/animaux/26.webp",
     "/ressources/animaux/27.webp",
     "/ressources/animaux/28.webp",
-
 ];
 
-//Crée une variable pour stocker le nombre total de cases
+//Création variable pour stocker le nombre total de cases
 const nombreTotalDeCases = document.querySelectorAll('#jeu td').length;
 
-//Calcule le nombre d’images uniques nécessaires 
+//Calcul nombre d’images uniques nécessaires 
 const nombreImagesUniques = nombreTotalDeCases / 2;
 
-//obtenir les premières images du tableau imagesTab 
+//selection premières images du tableau imagesTab 
 const imagesSelectionnees = imagesTab.slice(0, nombreImagesUniques);
 
-//Duplique ce sous-ensemble pour que chaque image ait sa paire
+//creation d'un tableau dans lequel on double les images selectionnées pour avoir des paires
 const imagesPourLeJeu = [...imagesSelectionnees, ...imagesSelectionnees];
 
-let premiereCarteRetournee = null;
 
-let secondeCarteRetournee = null;
+//melange les images avant de les repartir sur le plateau
+melangerTableau(imagesPourLeJeu);
 
-let estEnCoursDeVerification = false;
+//associe chaque image du tableau contenant les paires, a une case du tableau HTML
+associerImagesALaGrille();
 
-let nombreDeCoups = 0;
+//declaration de cartes, nodelist contenant l'id de chaque case du tableau html
+const cartes = document.querySelectorAll('#jeu td');
 
-let pairesTrouvees = 0;
+// pour chaque carte 
+cartes.forEach(carte => {
+
+    //on ajoute un eventListener, au clic
+    carte.addEventListener('click', function() {
+
+        //empeche de retourner deux fois la même carte ou retourner plus de deux cartes à la fois SI   verif en cours    OU     SI    identique a la premiere carte retournee
+        if (estEnCoursDeVerification || carte === premiereCarteRetournee || carte === secondeCarteRetournee) {
+            return;
+        }
+
+        //afficher l’image à deviner (côté recto) de la carte.
+        retournerCarte(carte);
+
+        //SI   c'est la première carte retournée, définir sur la carte actuelle
+        if (!premiereCarteRetournee) {
+            premiereCarteRetournee = carte;
+
+        } else {
+
+            //SINON   definir sur secondeCarteRetournee
+            secondeCarteRetournee = carte;
+            estEnCoursDeVerification = true;
+
+            // Désactiver l'écoute des événements de clic, pour empecher de jouer d'autres cartes
+            cartes.forEach(carte => {
+                carte.removeEventListener('click', retournerCarte);
+            });
+
+            //lancer fonction de verification de paire ou non
+            verifierCorrespondance();
+        }
+    });
+});
+
 
 
 function melangerTableau(tab) {
@@ -63,10 +111,6 @@ function melangerTableau(tab) {
         [tab[i], tab[j]] = [tab[j], tab[i]];
     }
 }
-
-//melange les images avant de les repartir sur le plateau
-melangerTableau(imagesPourLeJeu);
-
 
 function associerImagesALaGrille() {
     
@@ -91,82 +135,105 @@ function associerImagesALaGrille() {
         carte.appendChild(image); 
     }
 }
-associerImagesALaGrille();
 
-const cartes = document.querySelectorAll('#jeu td');
-
-// pour chaque carte 
-cartes.forEach(carte => {
-
-    //on ajoute un eventListener, qui au clic, execute la fonction
-    carte.addEventListener('click', function() {
-
-        //empeche de retourner deux fois la même carte ou retourner plus de deux cartes à la fois si verif en cours ou si identique a la premiere carte retournee
-        if (estEnCoursDeVerification || carte === premiereCarteRetournee) {
-            return;
-        }
-
-        //afficher l’image à deviner (côté recto) de la carte.
-        retournerCarte(carte);
-
-        //si c'est la première carte retournée, définir sur la carte actuelle
-        if (!premiereCarteRetournee) {
-            premiereCarteRetournee = carte;
-
-        } else {
-
-            //sinon definir sur secondeCarteRetournee
-            secondeCarteRetournee = carte;
-            estEnCoursDeVerification = true;
-            verifierCorrespondance();
-        }
-    });
-});
-
-//change l’apparence de la carte pour montrer l’image à deviner
 function retournerCarte(carte) {
+    // Ajoute la classe pour déclencher l'animation 3D
+    carte.classList.add('carte-retournee');
+    
 
-//on definit une variable pour le verso, et le recto/a Deviner
+    // Attend un court délai avant de changer la visibilité des images
+    setTimeout(() => {
+        // Sélectionne l'image recto et verso de la carte
         const imgVerso = carte.querySelector('img:first-child');
         const imgADeviner = carte.querySelector('img:last-child');
 
-
-        // Vérifie si l'image est déjà affichée avant de la retourner
-    if (imgADeviner.style.display === 'block') {
-        imgVerso.style.display = 'block';
-        imgADeviner.style.display = 'none';
-    } else {
+        // Change la visibilité des images
         imgVerso.style.display = 'none';
         imgADeviner.style.display = 'block';
-    }
+    }, 150); // Délai pour permettre à l'animation de démarrer avant de changer la visibilité, (sinon animation pas coherente)
 }
+
+
+
+function cacherCarte(carte) {
+    // Sélectionne l'image recto et verso de la carte
+    const imgVerso = carte.querySelector('img:first-child');
+    const imgADeviner = carte.querySelector('img:last-child');
+
+
+
     
-        
+        // Change la visibilité des images
+        imgVerso.style.display = 'block';
+        imgADeviner.style.display = 'none';
+
+        // Retire la transformation 3D de la carte
+        carte.classList.remove('carte-retournee');
+    
+}
+
+
+
+
 function verifierCorrespondance() {
+    //pour definir si deux images sont identiques, on compare leur url
+
+    //creation de deux variables correspondant aux url des images de la premiere, et de la seconde carte
     let imgPremiereCarte = premiereCarteRetournee.lastElementChild.src;
     let imgSecondeCarte = secondeCarteRetournee.lastElementChild.src;
-
+    
+    
+    // Si les cartes correspondent, on les laisse retournées, on desactive le clic dessus
     if (imgPremiereCarte === imgSecondeCarte) {
         premiereCarteRetournee.removeEventListener('click', retournerCarte);
         secondeCarteRetournee.removeEventListener('click', retournerCarte);
+
+        //on reinitialise les variables de premiere et seconde cartes retournees, et le booléen indiquant la verification en cours.
         reinitialiserVerification();
+
+        //on implémente le compteur de paires trouvées
         pairesTrouvees++;
+
+        //on met l'affichage du compteur de paires à jour
+        document.getElementById('compteurPaires').textContent = "Paires découvertes : " + pairesTrouvees;
+
+
+
+        //  SI  toutes les paires trouvées
         if (pairesTrouvees === nombreImagesUniques) {
-            // Toutes les paires ont été trouvées, le jeu est terminé
-            console.log('Bravo ! Vous avez gagné !');
+
+            //on met a jour l'affichage du compteur pour inquer la victoire
+            document.getElementById('compteurPaires').textContent = "Vous avez trouvé toutes les paires ! Félicitations !";
         }
+
+
+// SINON   (si les cartes ne correspondent pas)
     } else {
+        
+        // On les retourne après un délai 
         setTimeout(() => {
-            retournerCarte(premiereCarteRetournee);
-            retournerCarte(secondeCarteRetournee);
-            reinitialiserVerification();
-        }, 3000);
+            // Vérifie que les deux cartes soient bien retournées
+            if (premiereCarteRetournee && secondeCarteRetournee) {
+
+                //retourne les cartes
+                cacherCarte(premiereCarteRetournee);
+                cacherCarte(secondeCarteRetournee);
+
+                reinitialiserVerification();
+            }
+
+            // Réactiver l'écoute des clics après le délai
+            cartes.forEach(carte => {
+                carte.addEventListener('click', retournerCarte);
+            });
+        }, 1500); // 1000 ms (1 secondes) de délai
     }
+
     nombreDeCoups++;
     document.getElementById('affichageNbCoups').textContent = `Nombre de coups : ${nombreDeCoups}`;
 }
 
-//réinitialiser les variables premiereCarteRetournee, secondeCarteRetournee et estEnCoursDeVerification après chaque tentative
+
     function reinitialiserVerification() {
         premiereCarteRetournee = null;
         secondeCarteRetournee = null;
@@ -183,13 +250,9 @@ function verifierCorrespondance() {
 
 
 
-// function reinitialiserJeu() {
-//     // Code pour réinitialiser le jeu
-// }
 
-// document.addEventListener('keydown', function(event) {
-//     if (event.key === ' ') {
-//         reinitialiserJeu();
-//     }
-// });
+
+
+
+
 
