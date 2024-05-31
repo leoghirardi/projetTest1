@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ENI - Memory - Accueil</title>
     <link rel="stylesheet" href="css/style.css" />
+    <script src="js/inscriptionForm.js" defer></script>
 </head>
 <body>
     <div class="titre">
@@ -24,7 +25,7 @@
     <section id="inscription" class="principale">
         <h3>Inscrivez-vous</h3>
 
-        <form class="inscription" action="">
+        <form class="inscription" id="inscriptionForm" action="">
             <label for="nom">Nom d'utilisateur</label>
             <input type="text"
             id="nom"
@@ -35,7 +36,7 @@
             pattern="[A-Za-z0-9]{3,}"
             >
             <p id="nomMessage">Au moins 3 caractères</p>
-            <!-- pattern="[A-Za-z0-9]{3,}" -->
+            
 
             <label for="email">Entrez votre email</label>
             <input type="email"
@@ -44,6 +45,7 @@
             required
             placeholder="Votre email"
             >
+            <p id="emailMessage"></p>
 
             <label for="mdp">Mot de passe</label>
             <input type="password"
@@ -51,7 +53,7 @@
             name="mdp"
             required
             placeholder="Votre mot de passe"
-            pattern="(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{6,}"
+            
             title="Au moins un symbole, un chiffre, ainsi que 6 caractères minimum"
             >
             <p id="mdpMessage">Au moins un symbole, un chiffre, ainsi que 6 caractères minimum.</p>
@@ -62,9 +64,8 @@
             name="mdpConfirm"
             required
             placeholder="Confirmez le mot de passe"
-            pattern="(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{6,}"
-            
             >
+            <p id="mdpConfirmMessage"></p>
 
             <button class="button" id="btnCreation" type="submit">Création du compte</button>
             <button class="button" id="btnAnnulerCreation">Annuler</button>
